@@ -399,13 +399,15 @@ function startHandler(event, element, positionsFromEvent) {
   if (startingPositionsLength === 1) {
     this.dragStart(event, element);
 
-    let pressInterval = setTimeout(() => {
-      pressInterval = null;
+    const interval = setTimeout(() => {
+      const pressInterval = null;
 
       this.setPressSInterval(pressInterval);
 
       this.press(event, element);
     }, PRESS_DELAY);
+
+    const pressInterval = interval; ///
 
     this.setPressSInterval(pressInterval);
   }
@@ -539,13 +541,15 @@ function tap(event, element) {
     return;
   }
 
-  tapInterval = setTimeout(() => {
+  const interval = setTimeout(() => {
     tapInterval = null;
 
     this.setTapInterval(tapInterval);
 
     this.singleTap(event, element, top, left);
   }, TAP_DELAY);
+
+  tapInterval = interval; ///
 
   this.setTapInterval(tapInterval);
 }
