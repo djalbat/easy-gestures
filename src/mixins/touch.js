@@ -26,13 +26,13 @@ import { PRESS_CUSTOM_EVENT_TYPE,
 const { push, first, second } = arrayUtilities;
 
 function enableTouch() {
-  const tapInterval = null,
+  const tapTimeout = null,
         startMagnitude = null,
         startPositions = [],
         movingPositions = [];
 
   this.updateState({
-    tapInterval,
+    tapTimeout,
     startMagnitude,
     startPositions,
     movingPositions
@@ -269,16 +269,16 @@ function offCustomDoubleTap(doubleTapCustomHandler, element) {
   this.offCustomEvent(customEventType, customHandler, element);
 }
 
-function getTapInterval() {
-  const { tapInterval } = this.getState();
+function getTapTimeout() {
+  const { tapTimeout } = this.getState();
 
-  return tapInterval;
+  return tapTimeout;
 }
 
-function getPressSInterval() {
-  const { pressInterval } = this.getState();
+function getPressSTimeout() {
+  const { pressTimeout } = this.getState();
 
-  return pressInterval;
+  return pressTimeout;
 }
 
 function getStartMagnitude() {
@@ -299,15 +299,15 @@ function getMovingPositions() {
   return movingPositions;
 }
 
-function setTapInterval(tapInterval) {
+function setTapTimeout(tapTimeout) {
   this.updateState({
-    tapInterval
+    tapTimeout
   });
 }
 
-function setPressSInterval(pressInterval) {
+function setPressSTimeout(pressTimeout) {
   this.updateState({
-    pressInterval
+    pressTimeout
   });
 }
 
@@ -399,17 +399,17 @@ function startHandler(event, element, positionsFromEvent) {
   if (startingPositionsLength === 1) {
     this.dragStart(event, element);
 
-    const interval = setTimeout(() => {
-      const pressInterval = null;
+    const timeout = setTimeout(() => {
+      const pressTimeout = null;
 
-      this.setPressSInterval(pressInterval);
+      this.setPressSTimeout(pressTimeout);
 
       this.press(event, element);
     }, PRESS_DELAY);
 
-    const pressInterval = interval; ///
+    const pressTimeout = timeout; ///
 
-    this.setPressSInterval(pressInterval);
+    this.setPressSTimeout(pressTimeout);
   }
 
   if (startingPositionsLength === 2) {
@@ -442,14 +442,14 @@ function moveHandler(event, element, positionsFromEvent) {
     }
   }
 
-  let pressInterval = this.getPressSInterval();
+  let pressTimeout = this.getPressSTimeout();
 
-  if (pressInterval !== null) {
-    clearTimeout(pressInterval);
+  if (pressTimeout !== null) {
+    clearTimeout(pressTimeout);
 
-    pressInterval = null;
+    pressTimeout = null;
 
-    this.setPressSInterval(pressInterval);
+    this.setPressSTimeout(pressTimeout);
   }
 }
 
@@ -477,14 +477,14 @@ function endHandler(event, element, positionsFromEvent) {
 
   filterPositions(movingPositions, positions);
 
-  let pressInterval = this.getPressSInterval();
+  let pressTimeout = this.getPressSTimeout();
 
-  if (pressInterval !== null) {
-    clearTimeout(pressInterval);
+  if (pressTimeout !== null) {
+    clearTimeout(pressTimeout);
 
-    pressInterval = null;
+    pressTimeout = null;
 
-    this.setPressSInterval(pressInterval);
+    this.setPressSTimeout(pressTimeout);
   }
 }
 
@@ -527,31 +527,31 @@ function tap(event, element) {
         top = startPosition.getTop(),
         left = startPosition.getLeft();
 
-  let tapInterval = this.getTapInterval();
+  let tapTimeout = this.getTapTimeout();
 
-  if (tapInterval !== null) {
-    clearTimeout(tapInterval);
+  if (tapTimeout !== null) {
+    clearTimeout(tapTimeout);
 
-    tapInterval = null;
+    tapTimeout = null;
 
-    this.setTapInterval(tapInterval);
+    this.setTapTimeout(tapTimeout);
 
     this.doubleTap(event, element, top, left);
 
     return;
   }
 
-  const interval = setTimeout(() => {
-    tapInterval = null;
+  const timeout = setTimeout(() => {
+    tapTimeout = null;
 
-    this.setTapInterval(tapInterval);
+    this.setTapTimeout(tapTimeout);
 
     this.singleTap(event, element, top, left);
   }, TAP_DELAY);
 
-  tapInterval = interval; ///
+  tapTimeout = timeout; ///
 
-  this.setTapInterval(tapInterval);
+  this.setTapTimeout(tapTimeout);
 }
 
 function drag(event, element) {
@@ -722,13 +722,13 @@ const touchMixins = {
   offCustomSingleTap,
   onCustomDoubleTap,
   offCustomDoubleTap,
-  getTapInterval,
-  getPressSInterval,
+  getTapTimeout,
+  getPressSTimeout,
   getStartMagnitude,
   getStartPositions,
   getMovingPositions,
-  setTapInterval,
-  setPressSInterval,
+  setTapTimeout,
+  setPressSTimeout,
   setStartMagnitude,
   setStartPositions,
   setMovingPositions,
